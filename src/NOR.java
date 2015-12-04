@@ -1,1 +1,1 @@
-public class NOR extends GATE{}
+public class NOR extends Gate{}

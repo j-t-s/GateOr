@@ -2,20 +2,22 @@ public class NodeHandler{
   enum Mode {MOVE, SELECT, TOGGLE_POWER};
   private static Mode mode;
   
+  /**Gets the Mode of the NodeHandler*/
   static Mode getMode(){
     return mode;
   }
   
+  /**Sets the Mode of the NodeHandler*/
   static void setMode(Mode newMode){
     mode = newMode;
   }
   
   /**Constructs a new note determined by type and appends it to the Node linkedList in GateOr.*/
-  /*static void create(NodeType type){}//enum NodeType will need to be defined.
+  static void create(Node.Type type){
     Node newOne;
     switch(type){
-      case Power: newOne = new Power();break;
-      case Output: newOne = new Output();break;
+      case POWER: newOne = new Power();break;
+      case OUTPUT: newOne = new Output();break;
       case AND: newOne = new AND();break;
       case OR: newOne = new OR();break;
       case XOR: newOne = new XOR();break;
@@ -24,7 +26,7 @@ public class NodeHandler{
       case NOT: newOne = new NOT();break;
     }
     GateOr.NodeList.add(newOne);
-  */
+  }
   /**Retrieves nodes from the selected node list to remove all reference of them found in the node linked list and the input lists of all of the node.*/
   static void delete(){}
   /**Updates the coordinates of the nodes in the selected nodes list based on the user's mouse coordinates*/

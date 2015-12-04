@@ -1,1 +1,1 @@
-public abstract Gate extends Node{}
+public abstract class Gate extends Node{}

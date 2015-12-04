@@ -28,7 +28,17 @@ public class NodeHandler{
     GateOr.NodeList.add(newOne);
   }
   /**Retrieves nodes from the selected node list to remove all reference of them found in the node linked list and the input lists of all of the node.*/
-  static void delete(){}
+  static void delete(){
+    LinkedList<Node> rm = GateOr.getSelectedList();
+    for (Node node: rm){
+      //Remove all selected nodes in the NodeList
+      if(GateOr.getNodeList().remove(rm)){//This is just for testing, All items in the selected list should be in the NodeList. Just a test, will be removed in final version
+        System.out.println("Item "+rm+" was removed");
+      }else{
+        System.out.println("Item "+rm+" was not removed!");
+      }
+    }
+  }
   /**Updates the coordinates of the nodes in the selected nodes list based on the user's mouse coordinates*/
   static void move(){
     setMode(Mode.MOVE);
@@ -37,15 +47,51 @@ public class NodeHandler{
   /**Adds or removes the nodes found in the selected node list based on the user mouse input*/
   static void select(){
     setMode(mode = Mode.SELECT);
+    /*Just some pseudocode
+      if click
+        get coordinate and collision detect the nodes until node is found
+        GateOr.getSelectedList().addAll(newlySelectedNodes);//Add to the selected list
+      if mousepress and drag
+        get coordinates to form rectange and collision detect to find all the nodes selected
+        GateOr.getSelectedList().addAll(newlySelectedNodes);
+    */
     //Among other things.
   }
   /**This method takes the first two nodes defined in the selected node list and adds the first node's reference to the second node's input list*/
-  static void connect(){}
+  static void connect(){
+    if (GateOr.getSelectedList().size() > 2){System.out.println("More than two items are selected.");}//We could do a popup window to inform the user?
+    if (GateOR.getSelectedList.size() > 1){//Two or more items are selected and a connection can be make
+      if (GateOr.getSelectedList().get(1).inputs[0] == null){//Not sure if we are using an array for inputs
+        GateOr.getSelectedList().get(1).inputs[0] = GateOr.getSelectedList().get(0);
+      }else if (GateOr.getSelectedList().get(1).inputs[1] == null){//Go to the second input
+        GateOr.getSelectedList().get(1).inputs[1] = GateOr.getSelectedList().get(0);
+      }else{
+        //Gate is already connect, must be disconnected before a new connectioin is made.
+        System.out.println("Gate is already connect. It must be disconnected before a new connectioin is made.");
+      }
+    }
+  }
   /**Uses the nodes in the selected node list to remove all references of each other in their input lists*/
-  static void disconnect(){}
+  static void disconnect(){
+    LinkedList<Node> dc = GateOr.getSelectedList();
+    for (Node separateIn: dc){
+      for (Node separateOut: dc){
+        if (separateIn.input[0] == separateOut){separateIn.input[0] = null;}
+        if (separateIn.input[1] == separateOut){separateIn.input[1] = null;}
+      }
+    }
+  }
   /**Toggles the power for all Power nodes in the selected node list*/
   static void togglePower(){
     setMode(mode = Mode.TOGGLE_POWER);
-    //Among other things.
+    for (Node nodes: GateOr.getSelectedList()){
+      if (nodes instanceof Power){
+        if (nodes.getState() == Node.State.ON){
+          nodes.setState(Node.State.OFF);
+        }else{
+          nodes.setState(Node.State.ON);
+        }
+      }
+    }
   }
 }

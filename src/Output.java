@@ -1,1 +1,1 @@
-public abstract Output extends Node{}
+public class Output extends Node{}

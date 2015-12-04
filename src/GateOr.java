@@ -1,6 +1,6 @@
 public class GateOr{
-	LinkedList<Node> NodeList;
-	LinkedList<Node> SelectedList;
+	static LinkedList<Node> NodeList;
+	static LinkedList<Node> SelectedList;
 	
 	public static void main(String args[]){
 		System.out.println("blah blah");
@@ -9,10 +9,10 @@ public class GateOr{
 		//plus more possibly
 	}
 	/**Build and run the GUI elements, this includes starting the GUI's thread and renderer*/
-	void buildGUI(){}
+	static void buildGUI(){}
 	/**Will build and initialize all necessary data structures*/
-	void build(){}
-	LinkedList<Node> getNodeList(){return NodeList;}
-	LinkedList<Node> getSelectedList(){return SelectedList;}
+	static void build(){}
+	static LinkedList<Node> getNodeList(){return NodeList;}
+	static LinkedList<Node> getSelectedList(){return SelectedList;}
 
 }

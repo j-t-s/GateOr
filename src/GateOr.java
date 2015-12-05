@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class GateOr{
 	static LinkedList<Node> NodeList;
 	static LinkedList<Node> SelectedList;

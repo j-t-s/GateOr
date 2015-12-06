@@ -3,7 +3,17 @@ public abstract class Node{
   public enum State {ON, OFF, UNDEF};
   
   State state = State.UNDEF;
+  private Point coordinates = new Point(0, 0);//Upper left corner of the node
   
+  /**sets coordinates*/
+  public void setLocation(int x, int y){
+  	coordinates.x = x;
+  	coordinates.y = y;
+  }
+  /**gets coordinates*/
+  public Point getLocation(){
+  	return coordinates;
+  }
   /**
 	Sets a non-null input to the Node and returns true. If there are no non-null inputs no input is et and returns false
 	Gate class use this to set the inputs list.

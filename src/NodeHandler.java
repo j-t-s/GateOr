@@ -44,12 +44,14 @@ public class NodeHandler{
   }
   /**Updates the coordinates of the nodes in the selected nodes list based on the user's mouse coordinates*/
   static void move(){
-    setMode(Mode.MOVE);
-    //Among other things.
+    //This method is called from the MouseHandler if the NodeHandler mode is set to move by the user in the menu.
+    for (Node node: GateOr.getSelectedList()){//Go through all the selected nodes
+    	node.setLocation(node.getLocation().x + (GateOr.MouseHandler.dragX - GateOr.MouseHandler.X),
+    		node.getLocation().y + (GateOr.MouseHandler.dragY - GateOr.MouseHandler.Y));
+    }
   }
   /**Adds or removes the nodes found in the selected node list based on the user mouse input*/
   static void select(){
-    setMode(mode = Mode.SELECT);
     /*Just some pseudocode
       if click
         get coordinate and collision detect the nodes until node is found
@@ -105,7 +107,6 @@ public class NodeHandler{
   }
   /**Toggles the power for all Power nodes in the selected node list*/
   static void togglePower(){
-    setMode(mode = Mode.TOGGLE_POWER);
     for (Node nodes: GateOr.getSelectedList()){
       if (nodes instanceof Power){
         if (nodes.getState() == Node.State.ON){

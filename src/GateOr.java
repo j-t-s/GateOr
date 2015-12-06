@@ -20,6 +20,7 @@ public class GateOr{
 	}
 	static class MouseHandler implements MouseListener, MouseMotionListener{
 		static int X = 0, Y = 0;
+		static int dragX = 0; dragY = 0;
 		static int endX = 0, endY = 0;
 		public void mouseClicked(MouseEvent e){}
 		public void mouseEntered(MouseEvent e){}
@@ -36,6 +37,8 @@ public class GateOr{
 		}
 		
 		public void mouseDragged(MouseEvent e){
+			dragX = e.getX();
+			dragY = e.getY();
 			System.out.println("X: "+e.getX()+", Y: "+e.getY());
 		}
 		public void mouseMoved(MouseEvent e){}

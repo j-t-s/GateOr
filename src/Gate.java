@@ -4,7 +4,7 @@ public abstract class Gate extends Node{
 		if (inputs[0] == null){
 			inputs[0] = addedInput;
 		}else if (inputs[1] == null){
-			inputs[1] = addedInput
+			inputs[1] = addedInput;
 		}else{
 			return false;
 		}

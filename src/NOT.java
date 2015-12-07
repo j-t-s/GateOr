@@ -4,4 +4,6 @@ public class NOT extends Gate{
   void updateState(){//needs implemented
     
   }
+  @Override
+  void draw(Graphics g){}//needs implemented
 }

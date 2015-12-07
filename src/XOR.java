@@ -1,9 +1,9 @@
 public class XOR extends Gate{
-  public XOR(Point coord, String name){super(coord, name);}
+  public XOR(java.awt.Point coord, String name){super(coord, name);}
   @Override
-  void updateState(){//needs implemented
+  public void updateState(){//needs implemented
     
   }
   @Override
-  void draw(java.awt.Graphics g){}//needs implemented
+  public void draw(java.awt.Graphics g){}//needs implemented
 }

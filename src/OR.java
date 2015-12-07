@@ -4,4 +4,6 @@ public class OR extends Gate{
   void updateState(){//needs implemented
     
   }
+  @Override
+  void draw(java.awt.Graphics g){}//needs implemented
 }

@@ -48,7 +48,7 @@ public abstract class Node{
   
   public Node(State state, Point coord, String name){
   	setState(state);
-  	setLocation(coord);
+  	setLocation(coord.x, coord.y);
   	this.name = name;
   }
   public Node(){

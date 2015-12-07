@@ -1,9 +1,9 @@
 public class NOT extends Gate{
-  public NOT(Point coord, String name){super(coord, name);}
+  public NOT(java.awt.Point coord, String name){super(coord, name);}
   @Override
-  void updateState(){//needs implemented
+  public void updateState(){//needs implemented
     
   }
   @Override
-  void draw(java.awt.Graphics g){}//needs implemented
+  public void draw(java.awt.Graphics g){}//needs implemented
 }

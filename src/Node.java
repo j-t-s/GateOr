@@ -6,6 +6,7 @@ public abstract class Node{
   
   State state = State.UNDEF;
   private Point coordinates = new Point(0, 0);//Upper left corner of the node
+  String name = "";
   
   /**sets coordinates*/
   public void setLocation(int x, int y){
@@ -41,6 +42,12 @@ public abstract class Node{
   
   public State getState(){return state;}
   protected void setState(State state){this.state = state;}
-  //public abstract void updateState();//
+  //public abstract void updateState();//This should be uncommented when all of the non-abstract classes implement this.
+  
+  public Node(State state, Point coord, String name){
+  	setState(state);
+  	setLocation(coord);
+  	this.name = name;
+  }
   
 }

@@ -6,4 +6,7 @@ public class Power extends Node{
 		return null;
 	}
 	public void clrInput(int index){}
+	public Power(State state, Point coord, String name){
+		super(state, coord, name);
+	}
 }

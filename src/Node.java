@@ -42,7 +42,7 @@ public abstract class Node{
   
   public State getState(){return state;}
   protected void setState(State state){this.state = state;}
-  //public abstract void updateState();//This should be uncommented when all of the non-abstract classes implement this.
+  public abstract void updateState();
   
   public Node(State state, Point coord, String name){
   	setState(state);

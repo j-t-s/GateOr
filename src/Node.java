@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.awt.Graphics;
 
 public abstract class Node{
   public enum Type {POWER, OUTPUT, AND, OR, XOR, NOR, NAND, NOT};
@@ -43,6 +44,7 @@ public abstract class Node{
   public State getState(){return state;}
   protected void setState(State state){this.state = state;}
   public abstract void updateState();
+  public abstract void draw(Graphics g);
   
   public Node(State state, Point coord, String name){
   	setState(state);

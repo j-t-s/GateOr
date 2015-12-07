@@ -5,5 +5,5 @@ public class NOR extends Gate{
     
   }
   @Override
-  void draw(Graphics g){}//needs implemented
+  void draw(java.awt.Graphics g){}//needs implemented
 }

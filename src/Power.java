@@ -6,13 +6,13 @@ public class Power extends Node{
 		return null;
 	}
 	public void clrInput(int index){}
-	public Power(State state, Point coord, String name){
+	public Power(State state, java.awt.Point coord, String name){
 		super(state, coord, name);
 	}
 	@Override
-	void updateState(){//needs implemented
+	public void updateState(){//needs implemented
 	
 	}
 	@Override
-	void draw(java.awt.Graphics g){}//needs implemented
+	public void draw(java.awt.Graphics g){}//needs implemented
 }

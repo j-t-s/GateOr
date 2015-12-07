@@ -49,5 +49,8 @@ public abstract class Node{
   	setLocation(coord);
   	this.name = name;
   }
+  public Node(){
+  	name = System.currentTimeMillis()+"";//Make the name the time to be unique
+  }
   
 }

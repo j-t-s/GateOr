@@ -4,5 +4,6 @@ public class XOR extends Gate{
   void updateState(){//needs implemented
     
   }
+  @Override
   void draw(java.awt.Graphics g){}//needs implemented
 }

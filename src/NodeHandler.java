@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 
+import java.awt.Point;
+
 public class NodeHandler{
   enum Mode {MOVE, SELECT, TOGGLE_POWER};
   private static Mode mode;
@@ -18,14 +20,14 @@ public class NodeHandler{
   static void create(Node.Type type){
     Node newOne = null;
     switch(type){
-      case POWER: newOne = new Power();break;
-      case OUTPUT: newOne = new Output();break;
-      case AND: newOne = new AND();break;
-      case OR: newOne = new OR();break;
-      case XOR: newOne = new XOR();break;
-      case NOR: newOne = new NOR();break;
-      case NAND: newOne = new NAND();break;
-      case NOT: newOne = new NOT();break;
+      case POWER: newOne = new Power(Node.State.UNDEF, new Point(0,0), "");break;
+      case OUTPUT: newOne = new Output(new Point(0,0), "");break;
+      case AND: newOne = new AND(new Point(0,0), "");break;
+      case OR: newOne = new OR(new Point(0,0), "");break;
+      case XOR: newOne = new XOR(new Point(0,0), "");break;
+      case NOR: newOne = new NOR(new Point(0,0), "");break;
+      case NAND: newOne = new NAND(new Point(0,0), "");break;
+      case NOT: newOne = new NOT(new Point(0,0), "");break;
     }
 	if (newOne != null)
 		GateOr.NodeList.add(newOne);

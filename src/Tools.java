@@ -7,10 +7,18 @@ import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import javax.swing.JFileChooser;
 
+import java.awt.Point;
+import java.util.HashMap;
+
 public class Tools{
 	private LinkedList<Node> nodeList;
 	//I just put the file chooser in the tools method.
 	private JFileChooser fileSelect = new JFileChooser();
+	
+	//The string key is the nodes name, the Node is the reference to the node.
+	private HashMap<String, Node> nodeLookupTable = new HashMap<String, Node>();
+	//The string key is the nodes name, the string array is the name of nodes that are the input
+	private HashMap<String, String[]> nodeInputLookup = new HashMap<String, String[]>();
 
 
 	public Tools(LinkedList<Node> nodeList){
@@ -73,6 +81,17 @@ public class Tools{
 
 						//where we actually implement the new node.
 						//nodeList.add(new AND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder);//
+						Node node = new AND(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0), inputHolder.get(1)}
+							);
+						
 						break;
 					case "or":
 						//get the coordinates
@@ -86,6 +105,16 @@ public class Tools{
 						}
 						
 						//nodeList.add(new OR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
+						Node node = new OR(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0), inputHolder.get(1)}
+							);
 						break;
 					case "not":
 						//get the coordinates
@@ -99,6 +128,16 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NOT(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
+						Node node = new NOT(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0)}//Not only has one input
+							);
 						break;
 					case "nand":
 						//get the coordinates
@@ -112,6 +151,16 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NAND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
+						Node node = new NAND(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0), inputHolder.get(1)}
+							);
 						break;
 					case "nor":
 						//get the coordinates
@@ -125,6 +174,16 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NOR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
+						Node node = new NOR(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0), inputHolder.get(1)}
+							);
 						break;
 					case "xor":
 						//get the coordinates
@@ -138,6 +197,16 @@ public class Tools{
 						}
 						
 						//nodeList.add(new XOR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
+						Node node = new XOR(
+							new Point(coordHolder.get(0), coordHolder.get(1)),
+							n.getNamedItem("name").getTextContent());
+						nodeList.add(node);
+						nodeLookupTable.put(
+							n.getNamedItem("name").getTextContent(), node);
+						nodeInputLookup.put(
+							n.getNamedItem("name").getTextContent(),
+							new String[]{inputHolder.get(0), inputHolder.get(1)}
+							);
 						break;
 					}
 					
@@ -174,6 +243,13 @@ public class Tools{
 					
 					//The actual creation of the power node.
 					//nodeList.add(new Power(n.getNamedItem("name").getTextContent()), coordHolder, Integer.parseInt(n.getNamedItem("state").getTextContent())));
+					Node node = new Power(
+						new Point(coordHolder.get(0), coordHolder.get(1)),
+						n.getNamedItem("name").getTextContent());
+					nodeList.add(node);
+					nodeLookupTable.put(
+						n.getNamedItem("name").getTextContent(), node);
+					//nodeInputLookup.put();//Has no inputs
 					
 					coordHolder.clear();
 					inputHolder.clear();
@@ -203,8 +279,27 @@ public class Tools{
 					System.out.println("named: " + n.getNamedItem("name").getTextContent());
 					
 					//nodeList.add(new Output(n.getNamedItem("name").getTextContent()), coordHolder, n.getNamedItem("input").getTextContent()));
-					
+					Node node = new Output(
+						new Point(coordHolder.get(0), coordHolder.get(1)),
+						n.getNamedItem("name").getTextContent());
+					nodeList.add(node);
+					nodeLookupTable.put(
+						n.getNamedItem("name").getTextContent(), node);
+					nodeInputLookup.put(
+						n.getNamedItem("name").getTextContent(),
+						new String[]{inputHolder.get(0)}//output only has one input
+						);
 					coordHolder.clear();
+				}
+				for (Node nodes: NodeList){//Loop through all the nodes
+					String[] inputs = nodeInputLookup.get(nodes.name);//Get the string array of inputs
+					for (String inputName: inputs){//For all the inputs
+						if (!nodes.setInput(//Check to see if too many inputs are given
+							nodeLookUpTable.get(inputName)//Get the node reference from the name
+						)){
+							System.out.println(nodes.name+" was not added correctly.");//Say that it too many inputs were given.
+						}
+					}
 				}
 			}
 			

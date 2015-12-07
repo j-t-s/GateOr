@@ -50,6 +50,8 @@ public class NodeHandler{
     for (Node node: GateOr.getSelectedList()){//Go through all the selected nodes
     	node.setLocation(node.getLocation().x + (GateOr.MouseHandler.dragX - GateOr.MouseHandler.X),
     		node.getLocation().y + (GateOr.MouseHandler.dragY - GateOr.MouseHandler.Y));
+		GateOr.MouseHandler.X = GateOr.MouseHandler.dragX;
+		GateOr.MouseHandler.Y = GateOr.MouseHandler.dragY;
     }
   }
   /**Adds or removes the nodes found in the selected node list based on the user mouse input*/

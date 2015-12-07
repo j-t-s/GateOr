@@ -14,13 +14,13 @@ public class Output extends Node{
 	public void clrInput(int index){//regardless of index, input is set to null
 		input = null;
 	}
-	public Output(Point coord, String name){
+	public Output(java.awt.Point coord, String name){
 		super(Node.State.UNDEF, coord, name);
 	}
 	@Override
-	void updateState(){//needs implemented
+	public void updateState(){//needs implemented
 	
 	}
 	@Override
-  	void draw(java.awt.Graphics g){}//needs implemented
+  	public void draw(java.awt.Graphics g){}//needs implemented
 }

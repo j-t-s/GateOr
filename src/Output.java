@@ -21,4 +21,5 @@ public class Output extends Node{
 	void updateState(){//needs implemented
 	
 	}
+	void draw(java.awt.Graphics g){}//needs implemented
 }

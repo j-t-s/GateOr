@@ -22,7 +22,7 @@ public abstract class Gate extends Node{
 			inputs[index] = null;
 		}
 	}
-	public Gate(Point coord, String name){
+	public Gate(java.awt.Point coord, String name){
 		super(Node.State.UNDEF, coord, name);
 	}
 }

@@ -72,7 +72,7 @@ public class Tools{
 						
 
 						//where we actually implement the new node.
-						//nodeList.add(new AND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder);
+						//nodeList.add(new AND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder);//
 						break;
 					case "or":
 						//get the coordinates

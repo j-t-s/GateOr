@@ -17,4 +17,8 @@ public class Output extends Node{
 	public Output(Point coord, String name){
 		super(Node.State.UNDEF, coord, name);
 	}
+	@Override
+	void updateState(){//needs implemented
+	
+	}
 }

@@ -56,12 +56,15 @@ public class Tools{
 				NodeList power = xmlDoc.getDocumentElement().getElementsByTagName("power");
 				NodeList output = xmlDoc.getDocumentElement().getElementsByTagName("output");
 				
+				Node node = null;
+				
 				
 				//parse gates.
 				System.out.println("\nREADING GATES. . . ");
 				
 				for(int i = 0; i < gate.getLength(); i++){
 
+					
 					
 					n = gate.item(i).getAttributes();
 					
@@ -81,7 +84,7 @@ public class Tools{
 
 						//where we actually implement the new node.
 						//nodeList.add(new AND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder);//
-						Node node = new AND(
+						node = new AND(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -105,7 +108,7 @@ public class Tools{
 						}
 						
 						//nodeList.add(new OR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
-						Node node = new OR(
+						node = new OR(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -128,7 +131,7 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NOT(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
-						Node node = new NOT(
+						node = new NOT(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -151,7 +154,7 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NAND(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
-						Node node = new NAND(
+						node = new NAND(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -174,7 +177,7 @@ public class Tools{
 						}
 						
 						//nodeList.add(new NOR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
-						Node node = new NOR(
+						node = new NOR(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -197,7 +200,7 @@ public class Tools{
 						}
 						
 						//nodeList.add(new XOR(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
-						Node node = new XOR(
+						node = new XOR(
 							new Point(coordHolder.get(0), coordHolder.get(1)),
 							n.getNamedItem("name").getTextContent());
 						nodeList.add(node);
@@ -243,7 +246,16 @@ public class Tools{
 					
 					//The actual creation of the power node.
 					//nodeList.add(new Power(n.getNamedItem("name").getTextContent()), coordHolder, Integer.parseInt(n.getNamedItem("state").getTextContent())));
-					Node node = new Power(
+					
+					//find state
+					Node.State state;
+					switch(Integer.parseInt(n.getNamedItem("state").getTextContent())){
+						case 1: state = Node.State.ON;break;
+						case 0: state = Node.State.OFF;break;
+						default: state = Node.State.UNDEF;
+					}
+					node = new Power(
+						state,
 						new Point(coordHolder.get(0), coordHolder.get(1)),
 						n.getNamedItem("name").getTextContent());
 					nodeList.add(node);
@@ -279,7 +291,7 @@ public class Tools{
 					System.out.println("named: " + n.getNamedItem("name").getTextContent());
 					
 					//nodeList.add(new Output(n.getNamedItem("name").getTextContent()), coordHolder, n.getNamedItem("input").getTextContent()));
-					Node node = new Output(
+					node = new Output(
 						new Point(coordHolder.get(0), coordHolder.get(1)),
 						n.getNamedItem("name").getTextContent());
 					nodeList.add(node);
@@ -291,11 +303,11 @@ public class Tools{
 						);
 					coordHolder.clear();
 				}
-				for (Node nodes: NodeList){//Loop through all the nodes
+				for (Node nodes: nodeList){//Loop through all the nodes
 					String[] inputs = nodeInputLookup.get(nodes.name);//Get the string array of inputs
 					for (String inputName: inputs){//For all the inputs
 						if (!nodes.setInput(//Check to see if too many inputs are given
-							nodeLookUpTable.get(inputName)//Get the node reference from the name
+							nodeLookupTable.get(inputName)//Get the node reference from the name
 						)){
 							System.out.println(nodes.name+" was not added correctly.");//Say that it too many inputs were given.
 						}

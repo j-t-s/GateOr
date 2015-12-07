@@ -1,10 +1,20 @@
 public class Output extends Node{
-  	public boolean setInput(Node addedInput){//This is just a Stub
-		return false;
+	Node input = null;
+  	public boolean setInput(Node addedInput){
+		if (input == null){
+			input = addedInput;
+		}else{
+			return false;
+		}
+		return true;
 	}
-	public Node getInput(int index){//This is a stub
-		return null;
+	public Node getInput(int index){//regardless of index, input is returned
+		return input;
 	}
-	public void clrInput(int index){//Currently a stub
+	public void clrInput(int index){//regardless of index, input is set to null
+		input = null;
+	}
+	public Output(Point coord, String name){
+		super(Node.State.UNDEF, coord, name);
 	}
 }

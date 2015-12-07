@@ -9,4 +9,8 @@ public class Power extends Node{
 	public Power(State state, Point coord, String name){
 		super(state, coord, name);
 	}
+	@Override
+	void updateState(){//needs implemented
+	
+	}
 }

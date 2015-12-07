@@ -7,11 +7,12 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import javax.swing.Timer;
 
 
 public class GateOr{
-	static LinkedList<Node> NodeList;
-	static LinkedList<Node> SelectedList;
+	static LinkedList<Node> NodeList = new LinkedList<Node>();;
+	static LinkedList<Node> SelectedList = new LinkedList<Node>();;
 	
 	public static void main(String args[]){
 		build();
@@ -39,7 +40,8 @@ public class GateOr{
 		public void mouseDragged(MouseEvent e){
 			dragX = e.getX();
 			dragY = e.getY();
-			System.out.println("X: "+e.getX()+", Y: "+e.getY());
+			NodeHandler.move();
+			System.out.println("Drag X: "+e.getX()+", Y: "+e.getY());
 		}
 		public void mouseMoved(MouseEvent e){}
 	}
@@ -57,9 +59,16 @@ public class GateOr{
 		MouseHandler mouseHdlr = new MouseHandler();
 		frame.addMouseListener(mouseHdlr);
 		frame.addMouseMotionListener(mouseHdlr);
+		
+		Renderer rend = new Renderer(NodeList);
+		frame.add(rend);
+		(new Timer(33, rend)).start();
 	}
 	/**Will build and initialize all necessary data structures*/
-	static void build(){}
+	static void build(){
+		NodeHandler.create(Node.Type.AND);
+		SelectedList.add(NodeList.get(0));//make all selected;
+	}
 	static LinkedList<Node> getNodeList(){return NodeList;}
 	static LinkedList<Node> getSelectedList(){return SelectedList;}
 

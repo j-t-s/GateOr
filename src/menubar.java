@@ -267,8 +267,8 @@ public class menubar extends JMenuBar{
 
 		
 		public void actionPerformed(ActionEvent arg0) {
-			
-			
+			Tools a = new Tools(GateOr.getNodeList());
+			a.load();
 		}
 		
 	}

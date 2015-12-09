@@ -9,10 +9,24 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import javax.swing.Timer;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JButton;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+
+import java.awt.Dimension;
+
 
 public class GateOr{
-	static LinkedList<Node> NodeList = new LinkedList<Node>();;
-	static LinkedList<Node> SelectedList = new LinkedList<Node>();;
+	static LinkedList<Node> NodeList = new LinkedList<Node>();
+	static LinkedList<Node> SelectedList = new LinkedList<Node>();
 	
 	public static void main(String args[]){
 		build();
@@ -54,22 +68,98 @@ public class GateOr{
 		JFrame frame = new JFrame("GateOr - Logic Gate Simulator");
 		frame.setIconImage((new ImageIcon("workingLogo.png")).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setMinimumSize(new Dimension(640,320));
         frame.setSize(854,640);
-		frame.setVisible(true);
+		//Mouse Handler
 		MouseHandler mouseHdlr = new MouseHandler();
 		frame.addMouseListener(mouseHdlr);
 		frame.addMouseMotionListener(mouseHdlr);
-		
+		//Renderer
 		Renderer rend = new Renderer(NodeList);
 		frame.add(rend);
 		(new Timer(33, rend)).start();
+		
+		//Menu Bar
+		menubar bar = new menubar(854, 640);
+		
+		bar.cog = new JMenu("Cog");
+		bar.add(bar.cog);
+		bar.load = new JMenuItem("Load");
+		bar.save = new JMenuItem("Save");
+		bar.export = new JMenuItem("Export");
+		bar.help = new JMenuItem("Help");
+		bar.version = new JMenuItem("Version");
+		bar.close = new JMenuItem("Close");
+		bar.cog.add(bar.load);
+		bar.cog.add(bar.save);
+		bar.cog.add(bar.export);
+		bar.cog.add(bar.help);
+		bar.cog.add(bar.version);
+		bar.cog.add(bar.close);
+		
+		
+		int gateButtonX = 64, gateButtonY = 32;
+		bar.and = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.and.setIcon(new ImageIcon((new ImageIcon("AND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.and);
+		
+		bar.or = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.or.setIcon(new ImageIcon((new ImageIcon("OR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.or);
+		
+		bar.xor = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.xor.setIcon(new ImageIcon((new ImageIcon("XOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.xor);
+		
+		bar.nor = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.nor.setIcon(new ImageIcon((new ImageIcon("NOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.nor);
+		
+		bar.nand = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.nand.setIcon(new ImageIcon((new ImageIcon("NAND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.nand);
+		
+		bar.not = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		bar.not.setIcon(new ImageIcon((new ImageIcon("NOT.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.add(bar.not);
+		
+		bar.addToButtonList(bar.and);
+		bar.addToButtonList(bar.or);
+		bar.addToButtonList(bar.xor);
+		bar.addToButtonList(bar.nand);
+		bar.addToButtonList(bar.not);
+		bar.addToButtonList(bar.nor);
+		bar.addToButtonList(bar.line);
+		
+		//bar.resizeMenuBar(this.getWidth(), this.getHeight());
+		
+		bar.load.addActionListener(bar.new loadListener());
+		bar.close.addActionListener(bar.new closeListener());
+		bar.help.addActionListener(bar.new helpListener());
+		bar.version.addActionListener(bar.new versionListener());
+		
+		
+		frame.setJMenuBar(bar);
+		
+		
+		
+		
+		//try{Thread.sleep(800);}catch(Exception e){}//This is a pause for the splash screen if needed.
+		frame.setVisible(true);
 	}
 	/**Will build and initialize all necessary data structures*/
 	static void build(){
 		NodeHandler.create(Node.Type.AND);
 		SelectedList.add(NodeList.get(0));//make all selected;
+		
+		
 	}
 	static LinkedList<Node> getNodeList(){return NodeList;}
 	static LinkedList<Node> getSelectedList(){return SelectedList;}
-
 }

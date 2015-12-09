@@ -299,17 +299,19 @@ public class Tools{
 						n.getNamedItem("name").getTextContent(), node);
 					nodeInputLookup.put(
 						n.getNamedItem("name").getTextContent(),
-						new String[]{inputHolder.get(0)}//output only has one input
+						new String[]{n.getNamedItem("input").getTextContent()}//output only has one input
 						);
 					coordHolder.clear();
 				}
 				for (Node nodes: nodeList){//Loop through all the nodes
 					String[] inputs = nodeInputLookup.get(nodes.name);//Get the string array of inputs
-					for (String inputName: inputs){//For all the inputs
-						if (!nodes.setInput(//Check to see if too many inputs are given
-							nodeLookupTable.get(inputName)//Get the node reference from the name
-						)){
-							System.out.println(nodes.name+" was not added correctly.");//Say that it too many inputs were given.
+					if (inputs != null){
+						for (String inputName: inputs){//For all the inputs
+							if (!nodes.setInput(//Check to see if too many inputs are given
+								nodeLookupTable.get(inputName)//Get the node reference from the name
+							)){
+								System.out.println(nodes.name+" was not added correctly.");//Say that it too many inputs were given.
+							}
 						}
 					}
 				}
@@ -317,6 +319,7 @@ public class Tools{
 			
 		} catch(Exception e){
 			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 	}
 

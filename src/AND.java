@@ -11,7 +11,7 @@ public class AND extends Gate{
     }
   }
   @Override
-  public void draw(java.awt.Graphics g){
+  public void draw(java.awt.Graphics g){//Drawing to the input will need added
     java.awt.image.BufferedImage img = null;
     String filename = "AND.png";
     //get the image

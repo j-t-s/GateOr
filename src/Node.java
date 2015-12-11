@@ -6,8 +6,10 @@ public abstract class Node{
   public enum State {ON, OFF, UNDEF};
   
   State state = State.UNDEF;
-  private Point coordinates = new Point(0, 0);//Upper left corner of the node
+  private Point coordinates = new Point(10, 10);//Upper left corner of the node
   String name = "";
+  
+  int height = 75, width = 150;
   
   /**sets coordinates*/
   public void setLocation(int x, int y){

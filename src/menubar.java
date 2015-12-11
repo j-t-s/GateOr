@@ -60,7 +60,18 @@ public class menubar extends JMenuBar{
 		
 		
 	}
-	
+	public class createListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			if (e.getActionCommand() == "AND"){NodeHandler.create(Node.Type.AND);}
+			else if (e.getActionCommand() == "OR"){NodeHandler.create(Node.Type.OR);}
+			else if (e.getActionCommand() == "XOR"){NodeHandler.create(Node.Type.XOR);}
+			else if (e.getActionCommand() == "NOR"){NodeHandler.create(Node.Type.NOR);}
+			else if (e.getActionCommand() == "NAND"){NodeHandler.create(Node.Type.NAND);}
+			else if (e.getActionCommand() == "NOT"){NodeHandler.create(Node.Type.NOT);}
+			else if (e.getActionCommand() == "POWER"){NodeHandler.create(Node.Type.POWER);}
+			else if (e.getActionCommand() == "OUTPUT"){NodeHandler.create(Node.Type.OUTPUT);}
+		}
+	}
 
 	public class loadListener implements ActionListener{
 

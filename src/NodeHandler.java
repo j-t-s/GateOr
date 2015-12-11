@@ -1,10 +1,11 @@
 import java.util.LinkedList;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 public class NodeHandler{
   enum Mode {MOVE, SELECT, TOGGLE_POWER};
-  private static Mode mode;
+  private static Mode mode = Mode.SELECT;
   
   /**Gets the Mode of the NodeHandler*/
   static Mode getMode(){
@@ -55,7 +56,15 @@ public class NodeHandler{
     }
   }
   /**Adds or removes the nodes found in the selected node list based on the user mouse input*/
-  static void select(){
+  static void select(int x0, int y0, int x1, int y1){
+	LinkedList<Node> allNodes = GateOr.getNodeList();
+	LinkedList<Node> choosenOnes = GateOr.getSelectedList();
+    for (Node node: allNodes){
+		if ((new Rectangle(x0, y0, x1, y1)).intersects(new Rectangle(node.getLocation().x, node.getLocation().y, node.width, node.height))){
+			choosenOnes.add(node);
+			System.out.println("SELECTED");
+		}
+    }
     /*Just some pseudocode
       if click
         get coordinate and collision detect the nodes until node is found

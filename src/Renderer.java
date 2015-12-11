@@ -30,7 +30,7 @@ public class Renderer extends JPanel implements ActionListener{
 		for (int i = 0; i < GateOr.getSelectedList().size(); i++){
 			Node node = GateOr.getSelectedList().get(i);
 			g.setColor(Color.BLACK);
-			g.drawString("Selected", node.getLocation().x, node.getLocation().y);
+			g.drawString("Selected", node.getLocation().x+10, node.getLocation().y+10);
 		}	
 	}
 }

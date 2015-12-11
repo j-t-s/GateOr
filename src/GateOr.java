@@ -43,18 +43,29 @@ public class GateOr{
 		public void mousePressed(MouseEvent e){
 			X = e.getX();
 			Y = e.getY();
+			switch(NodeHandler.getMode()){
+				//case Move: NodeHandler.move();break;
+				case SELECT: NodeHandler.select(X,Y,X,Y);break;
+			}
 			System.out.println("X: "+X+", Y: "+Y);
 		}
 		public void mouseReleased(MouseEvent e){
 			endX = e.getX();
 			endY = e.getY();
+			switch(NodeHandler.getMode()){
+				//case Move: NodeHandler.move();break;
+				case SELECT: NodeHandler.select(X,Y,endX,endY);break;
+			}
 			System.out.println("X: "+endX+", Y: "+endY);
 		}
 		
 		public void mouseDragged(MouseEvent e){
 			dragX = e.getX();
 			dragY = e.getY();
-			NodeHandler.move();
+			switch(NodeHandler.getMode()){
+				case MOVE: NodeHandler.move();break;
+			}	
+			//NodeHandler.move();
 			System.out.println("Drag X: "+e.getX()+", Y: "+e.getY());
 		}
 		public void mouseMoved(MouseEvent e){}
@@ -102,31 +113,43 @@ public class GateOr{
 		bar.and = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.and.setIcon(new ImageIcon((new ImageIcon("AND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.and.setActionCommand("AND");
+		bar.and.addActionListener(bar.new createListener());
 		bar.add(bar.and);
 		
 		bar.or = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.or.setIcon(new ImageIcon((new ImageIcon("OR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.or.setActionCommand("OR");
+		bar.or.addActionListener(bar.new createListener());
 		bar.add(bar.or);
 		
 		bar.xor = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.xor.setIcon(new ImageIcon((new ImageIcon("XOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.xor.setActionCommand("XOR");
+		bar.xor.addActionListener(bar.new createListener());
 		bar.add(bar.xor);
 		
 		bar.nor = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.nor.setIcon(new ImageIcon((new ImageIcon("NOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.nor.setActionCommand("NOR");
+		bar.nor.addActionListener(bar.new createListener());
 		bar.add(bar.nor);
 		
 		bar.nand = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.nand.setIcon(new ImageIcon((new ImageIcon("NAND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.nand.setActionCommand("NAND");
+		bar.nand.addActionListener(bar.new createListener());
 		bar.add(bar.nand);
 		
 		bar.not = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.not.setIcon(new ImageIcon((new ImageIcon("NOT.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.not.setActionCommand("NOT");
+		bar.not.addActionListener(bar.new createListener());
 		bar.add(bar.not);
 		
 		bar.addToButtonList(bar.and);
@@ -155,8 +178,8 @@ public class GateOr{
 	}
 	/**Will build and initialize all necessary data structures*/
 	static void build(){
-		NodeHandler.create(Node.Type.AND);
-		SelectedList.add(NodeList.get(0));//make all selected;
+		//NodeHandler.create(Node.Type.AND);
+		//SelectedList.add(NodeList.get(0));//make all selected;
 		
 		
 	}

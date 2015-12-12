@@ -15,6 +15,7 @@ public class Renderer extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e){
+		this.requestFocusInWindow();
 		this.repaint();
 	}
 	
@@ -26,11 +27,19 @@ public class Renderer extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		for (int i = 0; i < nodeList.size(); i++){
 			nodeList.get(i).draw(g);
+			
 		}
 		for (int i = 0; i < GateOr.getSelectedList().size(); i++){
 			Node node = GateOr.getSelectedList().get(i);
-			g.setColor(Color.BLACK);
-			g.drawString("Selected", node.getLocation().x+10, node.getLocation().y+10);
-		}	
+			g.drawRect(node.getLocation().x,
+				node.getLocation().y,
+				node.width,
+				node.height);
+		}
+		if (NodeHandler.getMode() == NodeHandler.Mode.SELECT){
+			g.drawRect(GateOr.MouseHandler.X, GateOr.MouseHandler.Y, 
+				GateOr.MouseHandler.dragX - GateOr.MouseHandler.X, 
+				GateOr.MouseHandler.dragY - GateOr.MouseHandler.Y);
+		}
 	}
 }

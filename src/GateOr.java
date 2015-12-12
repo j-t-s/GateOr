@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import javax.swing.Timer;
 
 import javax.imageio.ImageIO;
@@ -57,6 +59,7 @@ public class GateOr{
 				case SELECT: NodeHandler.select(X,Y,endX,endY);break;
 			}
 			System.out.println("X: "+endX+", Y: "+endY);
+			X = Y = dragX = dragY = endX = endY = 0;//Reset everything
 		}
 		
 		public void mouseDragged(MouseEvent e){
@@ -70,6 +73,21 @@ public class GateOr{
 		}
 		public void mouseMoved(MouseEvent e){}
 	}
+	static class KeyHandler implements KeyListener{
+		public void keyPressed(KeyEvent e){
+			if (e.getKeyCode() == e.VK_M){
+				NodeHandler.setMode(NodeHandler.Mode.MOVE);
+			}else if (e.getKeyCode() == e.VK_S){
+				NodeHandler.setMode(NodeHandler.Mode.SELECT);
+			}else if (e.getKeyCode() == e.VK_T){
+				NodeHandler.setMode(NodeHandler.Mode.TOGGLE_POWER);
+			}else if (e.getKeyCode() == e.VK_DELETE){
+				NodeHandler.delete();
+			}
+		}
+		public void keyReleased(KeyEvent e){}
+		public void keyTyped(KeyEvent e){}
+	}
 	/**Build and run the GUI elements, this includes starting the GUI's thread and renderer*/
 	static void buildGUI(){
 		try {
@@ -80,13 +98,18 @@ public class GateOr{
 		frame.setIconImage((new ImageIcon("workingLogo.png")).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(640,320));
-        frame.setSize(854,640);
+        	frame.setSize(854,640);
 		//Mouse Handler
 		MouseHandler mouseHdlr = new MouseHandler();
-		frame.addMouseListener(mouseHdlr);
-		frame.addMouseMotionListener(mouseHdlr);
+
 		//Renderer
 		Renderer rend = new Renderer(NodeList);
+		rend.setFocusable(true);
+        	rend.requestFocusInWindow();
+		rend.addKeyListener(new KeyHandler());
+		        	
+		rend.addMouseListener(mouseHdlr);
+		rend.addMouseMotionListener(mouseHdlr);
 		frame.add(rend);
 		(new Timer(33, rend)).start();
 		
@@ -178,9 +201,11 @@ public class GateOr{
 	}
 	/**Will build and initialize all necessary data structures*/
 	static void build(){
-		//NodeHandler.create(Node.Type.AND);
+//		NodeHandler.create(Node.Type.AND);
+//		NodeHandler.create(Node.Type.AND);
+//		NodeList.get(0).setLocation(150,75);
 		//SelectedList.add(NodeList.get(0));//make all selected;
-		
+
 		
 	}
 	static LinkedList<Node> getNodeList(){return NodeList;}

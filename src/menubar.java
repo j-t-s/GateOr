@@ -26,6 +26,8 @@ public class menubar extends JMenuBar{
 	public JButton and, or, xor, nand, not, nor, line;
 	public JMenu cog;
 	
+	private Tools a = new Tools(GateOr.getNodeList());
+	
 	private LinkedList<JButton> buttonList = new LinkedList<JButton>();
 	
 	private final int maximumHeight = 35;
@@ -77,7 +79,6 @@ public class menubar extends JMenuBar{
 
 		
 		public void actionPerformed(ActionEvent arg0) {
-			Tools a = new Tools(GateOr.getNodeList());
 			a.load();
 		}
 		
@@ -86,8 +87,9 @@ public class menubar extends JMenuBar{
 
 			
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				System.out.println("Saving . . .");
+				a.save();
+				System.out.println("Saved.");
 			}
 	}
 	public class exportListener implements ActionListener{

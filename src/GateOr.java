@@ -186,6 +186,7 @@ public class GateOr{
 		//bar.resizeMenuBar(this.getWidth(), this.getHeight());
 		
 		bar.load.addActionListener(bar.new loadListener());
+		bar.save.addActionListener(bar.new saveListener());
 		bar.close.addActionListener(bar.new closeListener());
 		bar.help.addActionListener(bar.new helpListener());
 		bar.version.addActionListener(bar.new versionListener());

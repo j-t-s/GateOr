@@ -5,9 +5,15 @@ import org.xml.sax.*;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.swing.JFileChooser;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.HashMap;
 
 public class Tools{
@@ -20,7 +26,8 @@ public class Tools{
 	//The string key is the nodes name, the string array is the name of nodes that are the input
 	private HashMap<String, String[]> nodeInputLookup = new HashMap<String, String[]>();
 
-
+	private File loadedFile;
+	
 	public Tools(LinkedList<Node> nodeList){
 		this.nodeList = nodeList;
 	}
@@ -29,8 +36,152 @@ public class Tools{
 	public Tools(){
 		
 	}
+	
+	public String stateParser (Node n){
+		if (n.getState().equals(Node.State.ON)){
+			return "1";
+		}
+		else if (n.getState().equals(Node.State.OFF)){
+			return "0";
+		}
+		else{
+			return "-1";
+		}
+	}
+	
 	public void save(){
-
+		
+		int code = -1;
+		if (loadedFile == null){
+			code = fileSelect.showOpenDialog(null); // the null means we aren't parented with a jframe. We can change this so it minimizes/opens at a specific spot dictated by the parent.
+		}
+		Element Gate;
+		Element Power;
+		Element Output;
+		try{
+			//TODO[Matt]have to make sure the selected save location is good. We can come back and add some code so that the current working file auto saves.
+			if(loadedFile != null || code == JFileChooser.APPROVE_OPTION){
+				DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder documentBuild = documentFactory.newDocumentBuilder();
+				
+				Document mainDoc = documentBuild.newDocument();
+				Element root = mainDoc.createElement("NodeList");
+				mainDoc.appendChild(root);
+				
+				for(Node n : nodeList){
+					
+					switch(n.getClass().getName()){
+						case "AND":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "and");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords",(int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							try{//We do this because if a node doesn't have inputs it can't access the names of it's inputs.
+								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							} catch(NullPointerException e){
+								Gate.setAttribute("inputs", "null,null");
+							}
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "NAND":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "nand");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "NOT":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "not");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							try{
+								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							} catch(NullPointerException e){
+								Gate.setAttribute("inputs", "null,null");
+							}
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "NOR":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "nor");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							try{
+								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							} catch(NullPointerException e){
+								Gate.setAttribute("inputs", "null,null");
+							}
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "OR":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "or");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0" );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							try{
+								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							} catch(NullPointerException e){
+								Gate.setAttribute("inputs", "null,null");
+							}
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "XOR":
+							Gate = mainDoc.createElement("gate");
+							Gate.setAttribute("type", "xor");
+							Gate.setAttribute("name", n.name);
+							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
+							try{
+								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+							} catch(NullPointerException e){
+								Gate.setAttribute("inputs", "null,null");
+							}
+							root.appendChild(Gate);
+							Gate = null;
+							break;
+						case "Power":
+							Power = mainDoc.createElement("power");
+							Power.setAttribute("name", n.name);
+							Power.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );
+							Power.setAttribute("state", stateParser(n));
+							root.appendChild(Power);
+							break;
+						case "Output":
+							Output = mainDoc.createElement("output");
+							Output.setAttribute("name", n.name);
+							Output.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );
+							try{
+								Output.setAttribute("input", n.getInput(0).name);
+							} catch(NullPointerException e){
+								Output.setAttribute("input", "null");
+							}
+							root.appendChild(Output);
+							break;
+					}// end switch
+				}// end loop
+				
+				//add actual file stuff. Right now it's just outputing to console.
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(mainDoc);
+				StreamResult result = new StreamResult(fileSelect.getSelectedFile());
+				
+				//make it look nice.
+				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+				
+				transformer.transform(source, result);
+				
+			}
+		} catch (Exception e){
+			System.out.println(e.toString());
+		}
 	}
 
 	public void load(){
@@ -42,8 +193,12 @@ public class Tools{
 			int code = fileSelect.showOpenDialog(null);
 			if(code == JFileChooser.APPROVE_OPTION){
 				
+				//set the current working file to the loaded file. so we dont have to prompt every time.
+				loadedFile = fileSelect.getSelectedFile();
+				
 				//TODO[Matt]Used if we have time, makes it so only xml files can be selected.  FileFilter.
 				//fileSelect.setFileFilter(xmlFileFilter);
+				
 				
 				Document xmlDoc = getDocument(fileSelect.getSelectedFile().toString());
 				System.out.println("finished loading xml");

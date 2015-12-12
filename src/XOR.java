@@ -6,4 +6,5 @@ public class XOR extends Gate{
   }
   @Override
   public void draw(java.awt.Graphics g){}//needs implemented
+  
 }

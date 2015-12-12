@@ -23,7 +23,7 @@ public class NodeHandler{
     switch(type){
       case POWER: newOne = new Power(Node.State.UNDEF, new Point(0,0), "");break;
       case OUTPUT: newOne = new Output(new Point(0,0), "");break;
-      case AND: newOne = new AND(new Point(0,0), "");break;
+      case AND: newOne = new AND(new Point(100,100), "");break;
       case OR: newOne = new OR(new Point(0,0), "");break;
       case XOR: newOne = new XOR(new Point(0,0), "");break;
       case NOR: newOne = new NOR(new Point(0,0), "");break;
@@ -35,15 +35,17 @@ public class NodeHandler{
   }
   /**Retrieves nodes from the selected node list to remove all reference of them found in the node linked list and the input lists of all of the node.*/
   static void delete(){
+  	disconnect();
     LinkedList<Node> rm = GateOr.getSelectedList();
     for (Node node: rm){
       //Remove all selected nodes in the NodeList
-      if(GateOr.getNodeList().remove(rm)){//This is just for testing, All items in the selected list should be in the NodeList. Just a test, will be removed in final version
-        System.out.println("Item "+rm+" was removed");
+      if(GateOr.getNodeList().remove(node)){//This is just for testing, All items in the selected list should be in the NodeList. Just a test, will be removed in final version
+        System.out.println("Item "+node+" was removed");
       }else{
-        System.out.println("Item "+rm+" was not removed!");
+        System.out.println("Item "+node+" was not removed!");
       }
     }
+    rm.clear();
   }
   /**Updates the coordinates of the nodes in the selected nodes list based on the user's mouse coordinates*/
   static void move(){
@@ -51,20 +53,45 @@ public class NodeHandler{
     for (Node node: GateOr.getSelectedList()){//Go through all the selected nodes
     	node.setLocation(node.getLocation().x + (GateOr.MouseHandler.dragX - GateOr.MouseHandler.X),
     		node.getLocation().y + (GateOr.MouseHandler.dragY - GateOr.MouseHandler.Y));
+    	//GateOr.MouseHandler.X = GateOr.MouseHandler.dragX;
+	//GateOr.MouseHandler.Y = GateOr.MouseHandler.dragY;
+	if (GateOr.getSelectedList().size() < 2){
 		GateOr.MouseHandler.X = GateOr.MouseHandler.dragX;
 		GateOr.MouseHandler.Y = GateOr.MouseHandler.dragY;
+	}
     }
+    if (GateOr.getSelectedList().size() > 1){
+		GateOr.MouseHandler.X = GateOr.MouseHandler.dragX;
+		GateOr.MouseHandler.Y = GateOr.MouseHandler.dragY;
+	}
+	
   }
   /**Adds or removes the nodes found in the selected node list based on the user mouse input*/
   static void select(int x0, int y0, int x1, int y1){
 	LinkedList<Node> allNodes = GateOr.getNodeList();
-	LinkedList<Node> choosenOnes = GateOr.getSelectedList();
-    for (Node node: allNodes){
-		if ((new Rectangle(x0, y0, x1, y1)).intersects(new Rectangle(node.getLocation().x, node.getLocation().y, node.width, node.height))){
-			choosenOnes.add(node);
+	LinkedList<Node> chosenOnes = new LinkedList<Node>();
+	for (Node node: allNodes){
+		if ((new Rectangle(x0, y0, x1 - x0, y1 - y0)).intersects(new Rectangle(node.getLocation().x, node.getLocation().y, node.width, node.height))){
+			chosenOnes.add(node);
 			System.out.println("SELECTED");
 		}
-    }
+		if (x0 == x1 || y0 == y1){
+			int nX0 = node.getLocation().x, nY0 = node.getLocation().y, nX1 = node.width, nY1 = node.height;
+			if (nY0 > y0 - nY1 && nY0 < y0){
+				if (nX0 > x0 - nX1 && nX0 < x0){
+					chosenOnes.add(node);
+					System.out.println("We Got One!!!");
+				}
+			}
+		}
+	}
+	if (chosenOnes.size() == 0){//If no items where chosen, clear!!
+		GateOr.getSelectedList().clear();
+	}
+	for (Node node: chosenOnes){
+		if (!GateOr.getSelectedList().contains(node))
+			GateOr.getSelectedList().add(node);
+	}
     /*Just some pseudocode
       if click
         get coordinate and collision detect the nodes until node is found

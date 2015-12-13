@@ -81,8 +81,13 @@ public class GateOr{
 				NodeHandler.setMode(NodeHandler.Mode.SELECT);
 			}else if (e.getKeyCode() == e.VK_T){
 				NodeHandler.setMode(NodeHandler.Mode.TOGGLE_POWER);
+				NodeHandler.togglePower();
 			}else if (e.getKeyCode() == e.VK_DELETE){
 				NodeHandler.delete();
+			}else if (e.getKeyCode() == e.VK_C){
+				NodeHandler.connect();
+			}else if (e.getKeyCode() == e.VK_D){
+				NodeHandler.disconnect();
 			}
 		}
 		public void keyReleased(KeyEvent e){}
@@ -97,8 +102,8 @@ public class GateOr{
 		JFrame frame = new JFrame("GateOr - Logic Gate Simulator");
 		frame.setIconImage((new ImageIcon("workingLogo.png")).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(640,320));
-        	frame.setSize(854,640);
+		frame.setMinimumSize(new Dimension(775,320));
+        frame.setSize(854,640);
 		//Mouse Handler
 		MouseHandler mouseHdlr = new MouseHandler();
 
@@ -133,6 +138,8 @@ public class GateOr{
 		
 		
 		int gateButtonX = 64, gateButtonY = 32;
+		int powerButtonX = 32, powerButtonY = 32;
+		int outputButtonX = 32, outputButtonY = 32;
 		bar.and = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
 		bar.and.setIcon(new ImageIcon((new ImageIcon("AND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
@@ -174,6 +181,20 @@ public class GateOr{
 		bar.not.setActionCommand("NOT");
 		bar.not.addActionListener(bar.new createListener());
 		bar.add(bar.not);
+		
+		JButton power = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		power.setIcon(new ImageIcon((new ImageIcon("powerOff.png")).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		power.setActionCommand("POWER");
+		power.addActionListener(bar.new createListener());
+		bar.add(power);
+		
+		JButton output = new JButton();
+		//TODO the images will be inside of the jar and will need to be accessed as a reference 
+		output.setIcon(new ImageIcon((new ImageIcon("OutputOFF.png")).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		output.setActionCommand("OUTPUT");
+		output.addActionListener(bar.new createListener());
+		bar.add(output);
 		
 		bar.addToButtonList(bar.and);
 		bar.addToButtonList(bar.or);

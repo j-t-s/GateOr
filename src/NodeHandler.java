@@ -109,6 +109,7 @@ public class NodeHandler{
 		if(!GateOr.getSelectedList().get(1).setInput(GateOr.getSelectedList().get(0))){//Make connection and test if bad
 			System.out.println("Either already connected, the second selcted item must be disconnected before a new connectioin is made.");
 			System.out.println("Or the Power needs to be selcted first not second.");
+			System.out.println("Or the Output needs to be selcted second not first.");
 		}
 	
 	

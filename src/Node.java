@@ -8,6 +8,7 @@ public abstract class Node{
   State state = State.UNDEF;
   private Point coordinates = new Point(10, 10);//Upper left corner of the node
   String name = "";
+  String imgName = "";
   
   int height = 75, width = 150;
   

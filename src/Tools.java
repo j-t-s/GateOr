@@ -187,7 +187,8 @@ public class Tools{
 			int code = fileSelect.showOpenDialog(null);
 			if(code == JFileChooser.APPROVE_OPTION){
 				
-				GateOr.NodeList.clear();
+				GateOr.getNodeList().clear();
+				GateOr.getSelectedList().clear();
 				
 				
 				
@@ -463,7 +464,7 @@ public class Tools{
 	}
 	
 	public void export(){
-		int code = fileSelect.showOpenDialog(GateOr.getJframe());
+		int code = fileSelect.showSaveDialog(GateOr.getJframe());
 		
 		Container container = GateOr.getJframe().getContentPane();
 		
@@ -474,7 +475,11 @@ public class Tools{
 		
 		if (code == JFileChooser.APPROVE_OPTION){
 			try {
-				ImageIO.write(outImage, "PNG", fileSelect.getSelectedFile());
+				if (fileSelect.getSelectedFile().getName().endsWith(".png")){
+					ImageIO.write(outImage, "PNG", fileSelect.getSelectedFile());
+				}else{
+					ImageIO.write(outImage, "PNG", new File(fileSelect.getSelectedFile().getAbsolutePath()+".png"));
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

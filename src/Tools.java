@@ -10,10 +10,14 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
+import java.awt.Container;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Tools{
@@ -26,7 +30,6 @@ public class Tools{
 	//The string key is the nodes name, the string array is the name of nodes that are the input
 	private HashMap<String, String[]> nodeInputLookup = new HashMap<String, String[]>();
 
-	private File loadedFile;
 	
 	public Tools(LinkedList<Node> nodeList){
 		this.nodeList = nodeList;
@@ -52,15 +55,15 @@ public class Tools{
 	public void save(){
 		
 		int code = -1;
-		if (loadedFile == null){
-			code = fileSelect.showOpenDialog(null); // the null means we aren't parented with a jframe. We can change this so it minimizes/opens at a specific spot dictated by the parent.
-		}
+		
+		code = fileSelect.showOpenDialog(null); // the null means we aren't parented with a jframe. We can change this so it minimizes/opens at a specific spot dictated by the parent.
+		
 		Element Gate;
 		Element Power;
 		Element Output;
 		try{
 			//TODO[Matt]have to make sure the selected save location is good. We can come back and add some code so that the current working file auto saves.
-			if(loadedFile != null || code == JFileChooser.APPROVE_OPTION){
+			if(code == JFileChooser.APPROVE_OPTION){
 				DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder documentBuild = documentFactory.newDocumentBuilder();
 				
@@ -184,8 +187,9 @@ public class Tools{
 			int code = fileSelect.showOpenDialog(null);
 			if(code == JFileChooser.APPROVE_OPTION){
 				
-				//set the current working file to the loaded file. so we dont have to prompt every time.
-				loadedFile = fileSelect.getSelectedFile();
+				GateOr.NodeList.clear();
+				
+				
 				
 				//TODO[Matt]Used if we have time, makes it so only xml files can be selected.  FileFilter.
 				//fileSelect.setFileFilter(xmlFileFilter);
@@ -456,6 +460,27 @@ public class Tools{
 			System.out.println(e.toString());
 			e.printStackTrace();
 		}
+	}
+	
+	public void export(){
+		int code = fileSelect.showOpenDialog(GateOr.getJframe());
+		
+		Container container = GateOr.getJframe().getContentPane();
+		
+		System.out.println(container.getWidth() + " : " + container.getHeight());
+		BufferedImage outImage = new BufferedImage(container.getWidth(), container.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		
+		container.paint(outImage.getGraphics());
+		
+		if (code == JFileChooser.APPROVE_OPTION){
+			try {
+				ImageIO.write(outImage, "PNG", fileSelect.getSelectedFile());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	private Document getDocument(String s){

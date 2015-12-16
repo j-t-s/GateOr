@@ -15,6 +15,7 @@ import java.io.IOException;
 public class GateOr{
 	static LinkedList<Node> NodeList = new LinkedList<Node>();
 	static LinkedList<Node> SelectedList = new LinkedList<Node>();
+	static JFrame frame;
 	
 	public static void main(String args[]){
 		build();
@@ -94,7 +95,7 @@ public class GateOr{
 			
 		
 		
-		JFrame frame = new JFrame("GateOr - Logic Gate Simulator");
+		frame = new JFrame("GateOr - Logic Gate Simulator");
 		frame.setIconImage((new ImageIcon(GateOr.class.getResource("workingLogo.png"))).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(775,320));
@@ -233,6 +234,7 @@ public class GateOr{
 		bar.load.addActionListener(bar.new loadListener());
 		bar.save.addActionListener(bar.new saveListener());
 		bar.close.addActionListener(bar.new closeListener());
+		bar.export.addActionListener(bar.new exportListener());
 		bar.help.addActionListener(bar.new helpListener());
 		bar.version.addActionListener(bar.new versionListener());
 		
@@ -261,6 +263,7 @@ public class GateOr{
 
 		
 	}
+	static JFrame getJframe(){return frame;}
 	static LinkedList<Node> getNodeList(){return NodeList;}
 	static LinkedList<Node> getSelectedList(){return SelectedList;}
 }

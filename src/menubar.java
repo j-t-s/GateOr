@@ -108,6 +108,7 @@ public class menubar extends JMenuBar{
 				
 				public void actionPerformed(ActionEvent e) {
 					
+					a.export();
 					
 				}
 	}

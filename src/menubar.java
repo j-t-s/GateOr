@@ -143,7 +143,7 @@ public class menubar extends JMenuBar{
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							 String path = "vgCvhgf.png";
+							 String path = "VERSIONWINDOW.png";
 						        BufferedImage image = null;
 								try {
 									image = ImageIO.read(this.getClass().getClassLoader().getResource(path));

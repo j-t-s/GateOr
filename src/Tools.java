@@ -70,8 +70,7 @@ public class Tools{
 				
 				for(Node n : nodeList){
 					
-					switch(n.getClass().getName()){
-						case "AND":
+					if (n.getClass().getName().equals("AND")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "and");
 							Gate.setAttribute("name", n.name);
@@ -83,8 +82,7 @@ public class Tools{
 							}
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "NAND":
+					}else if (n.getClass().getName().equals("NAND")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "nand");
 							Gate.setAttribute("name", n.name);
@@ -92,8 +90,7 @@ public class Tools{
 							Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "NOT":
+					}else if (n.getClass().getName().equals("NOT")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "not");
 							Gate.setAttribute("name", n.name);
@@ -105,8 +102,7 @@ public class Tools{
 							}
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "NOR":
+					}else if (n.getClass().getName().equals("NOR")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "nor");
 							Gate.setAttribute("name", n.name);
@@ -118,8 +114,7 @@ public class Tools{
 							}
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "OR":
+					}else if (n.getClass().getName().equals("OR")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "or");
 							Gate.setAttribute("name", n.name);
@@ -131,8 +126,7 @@ public class Tools{
 							}
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "XOR":
+					}else if (n.getClass().getName().equals("XOR")){
 							Gate = mainDoc.createElement("gate");
 							Gate.setAttribute("type", "xor");
 							Gate.setAttribute("name", n.name);
@@ -144,15 +138,13 @@ public class Tools{
 							}
 							root.appendChild(Gate);
 							Gate = null;
-							break;
-						case "Power":
+					}else if (n.getClass().getName().equals("Power")){
 							Power = mainDoc.createElement("power");
 							Power.setAttribute("name", n.name);
 							Power.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );
 							Power.setAttribute("state", stateParser(n));
 							root.appendChild(Power);
-							break;
-						case "Output":
+					}else if (n.getClass().getName().equals("Output")){
 							Output = mainDoc.createElement("output");
 							Output.setAttribute("name", n.name);
 							Output.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );
@@ -162,7 +154,6 @@ public class Tools{
 								Output.setAttribute("input", "null");
 							}
 							root.appendChild(Output);
-							break;
 					}// end switch
 				}// end loop
 				
@@ -222,10 +213,7 @@ public class Tools{
 					
 					
 					n = gate.item(i).getAttributes();
-					
-					switch(n.getNamedItem("type").getTextContent()){
-					case "and":
-						
+					if (n.getNamedItem("type").getTextContent().equals("and")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -250,8 +238,7 @@ public class Tools{
 							new String[]{inputHolder.get(0), inputHolder.get(1)}
 							);
 						
-						break;
-					case "or":
+					} else if (n.getNamedItem("type").getTextContent().equals("or")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -273,8 +260,7 @@ public class Tools{
 							n.getNamedItem("name").getTextContent(),
 							new String[]{inputHolder.get(0), inputHolder.get(1)}
 							);
-						break;
-					case "not":
+					} else if (n.getNamedItem("type").getTextContent().equals("not")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -294,8 +280,7 @@ public class Tools{
 							n.getNamedItem("name").getTextContent(),
 							new String[]{inputHolder.get(0)}//Not only has one input
 							);
-						break;
-					case "nand":
+					} else if (n.getNamedItem("type").getTextContent().equals("nand")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -317,8 +302,7 @@ public class Tools{
 							n.getNamedItem("name").getTextContent(),
 							new String[]{inputHolder.get(0), inputHolder.get(1)}
 							);
-						break;
-					case "nor":
+					} else if (n.getNamedItem("type").getTextContent().equals("nor")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -340,8 +324,7 @@ public class Tools{
 							n.getNamedItem("name").getTextContent(),
 							new String[]{inputHolder.get(0), inputHolder.get(1)}
 							);
-						break;
-					case "xor":
+					} else if (n.getNamedItem("type").getTextContent().equals("xor")){
 						//get the coordinates
 						for(String s : n.getNamedItem("coords").getTextContent().split(",")){
 							coordHolder.add(Integer.parseInt(s));
@@ -363,7 +346,6 @@ public class Tools{
 							n.getNamedItem("name").getTextContent(),
 							new String[]{inputHolder.get(0), inputHolder.get(1)}
 							);
-						break;
 					}
 					
 					System.out.println("\nCreating a " + n.getNamedItem("type").getTextContent().toUpperCase() + " gate with coords:");

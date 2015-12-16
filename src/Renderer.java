@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**This class renders all the nodes by calling their draw method and giving them a graphic to draw on.*/
 public class Renderer extends JPanel implements ActionListener{
 	private Dimension windowSize;
 	private LinkedList<Node> nodeList;
@@ -36,10 +37,10 @@ public class Renderer extends JPanel implements ActionListener{
 				node.width,
 				node.height);
 		}
-		if (NodeHandler.getMode() == NodeHandler.Mode.SELECT){
+		/*if (NodeHandler.getMode() == NodeHandler.Mode.SELECT){//Deprecated
 			g.drawRect(GateOr.MouseHandler.X, GateOr.MouseHandler.Y, 
 				GateOr.MouseHandler.dragX - GateOr.MouseHandler.X, 
 				GateOr.MouseHandler.dragY - GateOr.MouseHandler.Y);
-		}
+		}*/
 	}
 }

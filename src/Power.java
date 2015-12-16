@@ -1,4 +1,12 @@
+import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.*;
+
+
 public class Power extends Node{
+	Image imgON = null;
+	Image imgOFF = null;
+	Image img = null;
   public boolean setInput(Node addedInput){
 		return false;
 	}
@@ -6,27 +14,33 @@ public class Power extends Node{
 		return null;
 	}
 	public void clrInput(int index){}
-	public Power(State state, java.awt.Point coord, String name){
+	public Power(State state, Point coord, String name){
 		super(state, coord, name);
 		height = 64;
 		width = 64;
 		imgName = "powerOff.png";
-	}
-	@Override
-	public void updateState(){//needs implemented
-	
-	}
-	@Override
-	public void draw(java.awt.Graphics g){
-		java.awt.Image img = null;
-		String filename = imgName;
-		if (getState() == Node.State.ON){
-				filename = "powerOn.png";
-		}
 		
-		//get the image
-		try {img = javax.imageio.ImageIO.read(new java.io.File(filename));}catch (java.io.IOException e){System.out.println("Could not get "+filename);}
+		//get the images
+		try {
+			imgON = ImageIO.read(this.getClass().getClassLoader().getResource("powerOn.png"));
+			imgOFF = ImageIO.read(this.getClass().getClassLoader().getResource("powerOff.png"));
+		}catch (IOException e){
+			System.out.println("Could not get Power images");
+		}
+	}
+	@Override
+	public void updateState(){}
+	@Override
+	public void draw(Graphics g){
+		if (imgON == null || imgOFF == null){
+			return;//Images were not loaded.
+		}
+		if (getState() == Node.State.ON){//Change the images appearance according to state
+			img = imgON;
+		}else{
+			img = imgOFF;
+		}
 		//draw the image
-		g.drawImage(img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH), getLocation().x, getLocation().y, null);
+		g.drawImage(img.getScaledInstance(width, height,  Image.SCALE_SMOOTH), getLocation().x, getLocation().y, null);
 	}
 }

@@ -99,9 +99,9 @@ public class Tools{
 							Gate.setAttribute("name", n.name);
 							Gate.setAttribute("coords", (int)n.getLocation().getX() + "," + (int)n.getLocation().getY() + ",0,0"  );//0,0 is just a blank value since we don't need them anymore. easier then taking them out.
 							try{
-								Gate.setAttribute("inputs", n.getInput(0).name+","+n.getInput(1).name);
+								Gate.setAttribute("input", n.getInput(0).name);
 							} catch(NullPointerException e){
-								Gate.setAttribute("inputs", "null,null");
+								Gate.setAttribute("input", "null");
 							}
 							root.appendChild(Gate);
 							Gate = null;
@@ -280,10 +280,8 @@ public class Tools{
 							coordHolder.add(Integer.parseInt(s));
 						}
 						
-						//get the inputs
-						for(String s : n.getNamedItem("inputs").getTextContent().split(",")){
-							inputHolder.add(s);
-						}
+						//get the input
+						inputHolder.add(n.getNamedItem("input").getTextContent());
 						
 						//nodeList.add(new NOT(n.getNamedItem("name").getTextContent()), coordHolder, inputHolder));
 						node = new NOT(

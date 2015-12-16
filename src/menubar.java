@@ -9,13 +9,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 
 
@@ -25,6 +19,7 @@ public class menubar extends JMenuBar{
 	public JMenuItem load, save, export, help, version, close;
 	public JButton and, or, xor, nand, not, nor, line;
 	public JMenu cog;
+	private JFrame theFrame;
 	
 	private Tools a = new Tools(GateOr.getNodeList());
 	
@@ -33,8 +28,8 @@ public class menubar extends JMenuBar{
 	private final int maximumHeight = 35;
 	
 		
-	public menubar(int width, int height){
-		
+	public menubar(JFrame frame, int width, int height){
+		theFrame = frame;
 	}
 	
 	public void addToButtonList(JButton button){
@@ -74,6 +69,22 @@ public class menubar extends JMenuBar{
 			else if (e.getActionCommand() == "OUTPUT"){NodeHandler.create(Node.Type.OUTPUT);}
 		}
 	}
+	
+	public class modeListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			if (e.getActionCommand() == "Select"){NodeHandler.setMode(NodeHandler.Mode.SELECT);}
+			else if (e.getActionCommand() == "Move"){NodeHandler.setMode(NodeHandler.Mode.MOVE);}
+			else if (e.getActionCommand() == "Toggle Power"){NodeHandler.setMode(NodeHandler.Mode.TOGGLE_POWER);}
+		}
+	}
+	
+	public class handleItemListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			if (e.getActionCommand() == "Connect"){NodeHandler.connect();}
+			else if (e.getActionCommand() == "Disconnect"){NodeHandler.disconnect();}
+			else if (e.getActionCommand() == "Delete"){NodeHandler.delete();}
+		}
+	}
 
 	public class loadListener implements ActionListener{
 
@@ -104,21 +115,23 @@ public class menubar extends JMenuBar{
 					
 		public void actionPerformed(ActionEvent e) {
 												
-			String path = "vgCvhgf.png";
-			File file = new File(path);
+			String path = "GateOrHelpWindow.png";
 			BufferedImage image = null;
 			try {
-				image = ImageIO.read(file);
+				image = ImageIO.read(this.getClass().getClassLoader().getResource(path));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			JLabel label = new JLabel(new ImageIcon(image));
-			JFrame f = new JFrame();
+			//JFrame f = new JFrame();
+			JDialog f = new JDialog(theFrame);
 			//f.setLocationRelativeTo(null);
 	        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Otherwise it will exit the whole program
-	        
-			f.getContentPane().add(label);
-			f.pack();
+	        JScrollPane jsp = new JScrollPane(label);
+			f.add(jsp);
+			//f.getContentPane().add(label);
+			//f.pack();
+			f.setSize(new Dimension(640,500));
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	        int width = gd.getDisplayMode().getWidth();
 	        f.setLocation(width/2-f.getWidth(),0);
@@ -130,15 +143,15 @@ public class menubar extends JMenuBar{
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							 String path = "vgCvhgf.png";
-						        File file = new File(path);
 						        BufferedImage image = null;
 								try {
-									image = ImageIO.read(file);
+									image = ImageIO.read(this.getClass().getClassLoader().getResource(path));
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}
 						        JLabel label = new JLabel(new ImageIcon(image));
-						        JFrame f = new JFrame();
+						        //JFrame f = new JFrame();
+								JDialog f = new JDialog(theFrame);
 						        f.setLocationRelativeTo(null);
 						        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Otherwise it will exit the whole program
 						        f.getContentPane().add(label);

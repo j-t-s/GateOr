@@ -1,29 +1,15 @@
 import java.util.LinkedList;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
-import javax.swing.Timer;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.Dimension;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JButton;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
-import java.awt.Dimension;
 
 
 public class GateOr{
@@ -45,31 +31,38 @@ public class GateOr{
 		public void mousePressed(MouseEvent e){
 			X = e.getX();
 			Y = e.getY();
+			NodeHandler.select(X,Y,X,Y, e.isShiftDown());
 			switch(NodeHandler.getMode()){
 				//case Move: NodeHandler.move();break;
-				case SELECT: NodeHandler.select(X,Y,X,Y);break;
+
+				case TOGGLE_POWER: {
+					GateOr.getSelectedList().clear();//Clear selected
+					NodeHandler.select(X,Y,X,Y, e.isShiftDown());//Reselect one to be toggled
+					NodeHandler.togglePower();//Toggle
+					break;
+				}
 			}
-			System.out.println("X: "+X+", Y: "+Y);
+			//System.out.println("X: "+X+", Y: "+Y);
 		}
 		public void mouseReleased(MouseEvent e){
 			endX = e.getX();
 			endY = e.getY();
 			switch(NodeHandler.getMode()){
 				//case Move: NodeHandler.move();break;
-				case SELECT: NodeHandler.select(X,Y,endX,endY);break;
+				case SELECT: NodeHandler.select(X,Y,endX,endY, e.isShiftDown());break;
 			}
-			System.out.println("X: "+endX+", Y: "+endY);
+			//System.out.println("X: "+endX+", Y: "+endY);
 			X = Y = dragX = dragY = endX = endY = 0;//Reset everything
 		}
 		
 		public void mouseDragged(MouseEvent e){
 			dragX = e.getX();
 			dragY = e.getY();
-			switch(NodeHandler.getMode()){
+			/*switch(NodeHandler.getMode()){
 				case MOVE: NodeHandler.move();break;
-			}	
-			//NodeHandler.move();
-			System.out.println("Drag X: "+e.getX()+", Y: "+e.getY());
+			}*/
+			NodeHandler.move();
+			//System.out.println("Drag X: "+e.getX()+", Y: "+e.getY());
 		}
 		public void mouseMoved(MouseEvent e){}
 	}
@@ -80,7 +73,7 @@ public class GateOr{
 			}else if (e.getKeyCode() == e.VK_S){
 				NodeHandler.setMode(NodeHandler.Mode.SELECT);
 			}else if (e.getKeyCode() == e.VK_T){
-				NodeHandler.setMode(NodeHandler.Mode.TOGGLE_POWER);
+				//NodeHandler.setMode(NodeHandler.Mode.TOGGLE_POWER);
 				NodeHandler.togglePower();
 			}else if (e.getKeyCode() == e.VK_DELETE){
 				NodeHandler.delete();
@@ -98,9 +91,11 @@ public class GateOr{
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch (UnsupportedLookAndFeelException e) {e.printStackTrace();}catch (ClassNotFoundException e) {e.printStackTrace();}catch (InstantiationException e) {e.printStackTrace();}catch (IllegalAccessException e) {e.printStackTrace();}
+			
+		
 		
 		JFrame frame = new JFrame("GateOr - Logic Gate Simulator");
-		frame.setIconImage((new ImageIcon("workingLogo.png")).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
+		frame.setIconImage((new ImageIcon(GateOr.class.getResource("workingLogo.png"))).getImage().getScaledInstance(64,64,  java.awt.Image.SCALE_SMOOTH));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(775,320));
         frame.setSize(854,640);
@@ -110,7 +105,7 @@ public class GateOr{
 		//Renderer
 		Renderer rend = new Renderer(NodeList);
 		rend.setFocusable(true);
-        	rend.requestFocusInWindow();
+        rend.requestFocusInWindow();
 		rend.addKeyListener(new KeyHandler());
 		        	
 		rend.addMouseListener(mouseHdlr);
@@ -119,19 +114,48 @@ public class GateOr{
 		(new Timer(33, rend)).start();
 		
 		//Menu Bar
-		menubar bar = new menubar(854, 640);
+		menubar bar = new menubar(frame, 854, 640);
 		
-		bar.cog = new JMenu("Cog");
+		//bar.cog = new JMenu("Cog");
+		bar.cog = new JMenu();
+		bar.cog.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("cog.png"))).getImage().getScaledInstance(56, 32,  java.awt.Image.SCALE_SMOOTH)));
 		bar.add(bar.cog);
 		bar.load = new JMenuItem("Load");
 		bar.save = new JMenuItem("Save");
 		bar.export = new JMenuItem("Export");
+		
+		JMenu mode = new JMenu("Mode");
+		JMenuItem select = new JMenuItem("Select");
+		//JMenuItem move = new JMenuItem("Move");//Move is no longer needed since now if the mouse is dragged, the selected is moved
+		JMenuItem toggle = new JMenuItem("Toggle Power");
+		mode.add(select);
+		//mode.add(move);
+		mode.add(toggle);
+		
+		select.addActionListener(bar.new modeListener());
+		//move.addActionListener(bar.new modeListener());
+		toggle.addActionListener(bar.new modeListener());
+		
+		JMenu handleItems = new JMenu("Handle Items");
+		JMenuItem connect = new JMenuItem("Connect");
+		JMenuItem disconnect = new JMenuItem("Disconnect");
+		JMenuItem delete = new JMenuItem("Delete");
+		handleItems.add(connect);
+		handleItems.add(disconnect);
+		handleItems.add(delete);
+		
+		connect.addActionListener(bar.new handleItemListener());
+		disconnect.addActionListener(bar.new handleItemListener());
+		delete.addActionListener(bar.new handleItemListener());
+		
 		bar.help = new JMenuItem("Help");
 		bar.version = new JMenuItem("Version");
 		bar.close = new JMenuItem("Close");
 		bar.cog.add(bar.load);
 		bar.cog.add(bar.save);
 		bar.cog.add(bar.export);
+		bar.cog.add(mode);
+		bar.cog.add(handleItems);
 		bar.cog.add(bar.help);
 		bar.cog.add(bar.version);
 		bar.cog.add(bar.close);
@@ -142,56 +166,56 @@ public class GateOr{
 		int outputButtonX = 32, outputButtonY = 32;
 		bar.and = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.and.setIcon(new ImageIcon((new ImageIcon("AND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.and.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("AND.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.and.setActionCommand("AND");
 		bar.and.addActionListener(bar.new createListener());
 		bar.add(bar.and);
 		
 		bar.or = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.or.setIcon(new ImageIcon((new ImageIcon("OR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.or.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("OR.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.or.setActionCommand("OR");
 		bar.or.addActionListener(bar.new createListener());
 		bar.add(bar.or);
 		
 		bar.xor = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.xor.setIcon(new ImageIcon((new ImageIcon("XOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.xor.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("XOR.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.xor.setActionCommand("XOR");
 		bar.xor.addActionListener(bar.new createListener());
 		bar.add(bar.xor);
 		
 		bar.nor = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.nor.setIcon(new ImageIcon((new ImageIcon("NOR.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.nor.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("NOR.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.nor.setActionCommand("NOR");
 		bar.nor.addActionListener(bar.new createListener());
 		bar.add(bar.nor);
 		
 		bar.nand = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.nand.setIcon(new ImageIcon((new ImageIcon("NAND.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.nand.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("NAND.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.nand.setActionCommand("NAND");
 		bar.nand.addActionListener(bar.new createListener());
 		bar.add(bar.nand);
 		
 		bar.not = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		bar.not.setIcon(new ImageIcon((new ImageIcon("NOT.png")).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		bar.not.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("NOT.png"))).getImage().getScaledInstance(gateButtonX, gateButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		bar.not.setActionCommand("NOT");
 		bar.not.addActionListener(bar.new createListener());
 		bar.add(bar.not);
 		
 		JButton power = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		power.setIcon(new ImageIcon((new ImageIcon("powerOff.png")).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		power.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("powerOff.png"))).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		power.setActionCommand("POWER");
 		power.addActionListener(bar.new createListener());
 		bar.add(power);
 		
 		JButton output = new JButton();
 		//TODO the images will be inside of the jar and will need to be accessed as a reference 
-		output.setIcon(new ImageIcon((new ImageIcon("OutputOFF.png")).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
+		output.setIcon(new ImageIcon((new ImageIcon(GateOr.class.getResource("OutputOFF.png"))).getImage().getScaledInstance(powerButtonX, powerButtonY,  java.awt.Image.SCALE_SMOOTH)));
 		output.setActionCommand("OUTPUT");
 		output.addActionListener(bar.new createListener());
 		bar.add(output);
@@ -215,11 +239,18 @@ public class GateOr{
 		
 		frame.setJMenuBar(bar);
 		
-		
-		
+		ActionListener simulate = new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				for (Node node: GateOr.getNodeList()){
+					node.updateState();
+				}
+			}
+		};
+		(new Timer(3, simulate)).start();
 		
 		//try{Thread.sleep(800);}catch(Exception e){}//This is a pause for the splash screen if needed.
 		frame.setVisible(true);
+		
 	}
 	/**Will build and initialize all necessary data structures*/
 	static void build(){

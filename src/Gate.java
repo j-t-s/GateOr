@@ -1,10 +1,13 @@
 import java.awt.geom.CubicCurve2D;
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
-import java.awt.Stroke;
+import java.awt.*;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
 
 public abstract class Gate extends Node{
-	Node[] inputs = new Node[2];//For simplicity, inputs is an array of two items. The graphics only support two inputs.
+	Node[] inputs = new Node[2];//For simplicity, inputs is an array of two items. The gate graphics only support two inputs.
+	BufferedImage img = null;
 	public boolean setInput(Node addedInput){
 		if(addedInput instanceof Output){
 			return false;
@@ -30,43 +33,47 @@ public abstract class Gate extends Node{
 			inputs[index] = null;
 		}
 	}
-	public Gate(java.awt.Point coord, String name){
+	public Gate(Point coord, String name, String imgName){
 		super(Node.State.UNDEF, coord, name);
+		this.imgName = imgName;
+		//get the image
+		try {
+			img = ImageIO.read(this.getClass().getClassLoader().getResource(imgName));
+		}catch (IOException e){System.out.println("Could not get "+imgName);}
 	}
 	@Override
-  public void draw(java.awt.Graphics g){//Drawing to the input will need added
+  public void draw(Graphics g){//Drawing to the input will need added
 	Graphics2D g2 = (Graphics2D)g;
-	java.awt.image.BufferedImage img = null;
-	String filename = imgName;
-	//get the image
-	try {img = javax.imageio.ImageIO.read(new java.io.File(filename));}catch (java.io.IOException e){System.out.println("Could not get "+filename);}
+	
 	//draw the image
 	g.drawImage(img, getLocation().x, getLocation().y, null);
-	if (this.getInput(0) != null){
-		CubicCurve2D c = new CubicCurve2D.Double();
-		c.setCurve(getLocation().x, getLocation().y+height/2,
-			getLocation().x - 64, getLocation().y+height/2,
-			getInput(0).getLocation().x+getInput(0).width + 64, getInput(0).getLocation().y+getInput(0).height/2,
-			getInput(0).getLocation().x+getInput(0).width, getInput(0).getLocation().y+getInput(0).height/2);
-		Stroke tmpStroke = g2.getStroke();	
-		g2.setStroke(new BasicStroke(3));
-		g2.draw(c);
-		g2.setStroke(tmpStroke);
-		//g.drawLine((int)getLocation().x, (int)getLocation().y+height/2, (int)this.getInput(0).getLocation().x+width, (int)this.getInput(0).getLocation().y+height/2);
-		//g.drawLine((int)getLocation().x, (int)getLocation().y+height/2, (int)this.getInput(0).getLocation().x+width, (int)this.getInput(0).getLocation().y+height/2);
-	}
-	if (this.getInput(1) != null){
-		CubicCurve2D c = new CubicCurve2D.Double();
-		c.setCurve(getLocation().x, getLocation().y+height/2,
-			getLocation().x - 64, getLocation().y+height/2,
-			getInput(1).getLocation().x+getInput(1).width + 64, getInput(1).getLocation().y+getInput(1).height/2,
-			getInput(1).getLocation().x+getInput(1).width, getInput(1).getLocation().y+getInput(1).height/2);
-		Stroke tmpStroke = g2.getStroke();	
-		g2.setStroke(new BasicStroke(3));
-		g2.draw(c);
-		g2.setStroke(tmpStroke);
-		//g.drawLine((int)getLocation().x, (int)getLocation().y+height/2, (int)this.getInput(0).getLocation().x+width, (int)this.getInput(0).getLocation().y+height/2);
-		//g.drawLine((int)getLocation().x, (int)getLocation().y+height/2, (int)this.getInput(0).getLocation().x+width, (int)this.getInput(0).getLocation().y+height/2);
+	//draw the lines
+	if (this instanceof NOT){
+		if (this.getInput(0) != null){
+			CubicCurve2D c = new CubicCurve2D.Double();
+			c.setCurve(getLocation().x + 10, getLocation().y+height/2,
+				getLocation().x - 64, getLocation().y+height/2,
+				getInput(0).getLocation().x+getInput(0).width + 64, getInput(0).getLocation().y+getInput(0).height/2,
+				getInput(0).getLocation().x+getInput(0).width - 10, getInput(0).getLocation().y+getInput(0).height/2);
+			Stroke tmpStroke = g2.getStroke();	
+			g2.setStroke(new BasicStroke(3));
+			g2.draw(c);
+			g2.setStroke(tmpStroke);
+		}
+	}else{
+		for (int in = 0; in < 2; in++){
+			if (this.getInput(in) != null){
+				CubicCurve2D c = new CubicCurve2D.Double();
+				c.setCurve(getLocation().x + 10, getLocation().y+height/2 - 15 + in*30,
+					getLocation().x - 64, getLocation().y+height/2 - 15 + in*30,
+					getInput(in).getLocation().x+getInput(in).width + 64, getInput(in).getLocation().y+getInput(in).height/2,
+					getInput(in).getLocation().x+getInput(in).width - 10, getInput(in).getLocation().y+getInput(in).height/2);
+				Stroke tmpStroke = g2.getStroke();	
+				g2.setStroke(new BasicStroke(3));
+				g2.draw(c);
+				g2.setStroke(tmpStroke);
+			}
+		}
 	}
   }
 }

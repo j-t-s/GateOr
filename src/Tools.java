@@ -56,7 +56,7 @@ public class Tools{
 		
 		int code = -1;
 		
-		code = fileSelect.showOpenDialog(null); // the null means we aren't parented with a jframe. We can change this so it minimizes/opens at a specific spot dictated by the parent.
+		code = fileSelect.showSaveDialog(null); // the null means we aren't parented with a jframe. We can change this so it minimizes/opens at a specific spot dictated by the parent.
 		
 		Element Gate;
 		Element Power;

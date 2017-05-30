@@ -1,0 +1,6 @@
+<nodeList>
+	<power name="power1" coords="10,10,20,20" state="1" />
+	<power name="power2" coords="10,30,20,40" state="1" />
+	<gate type="and" name="and1" coords="30,15,40,25" inputs="power1,power2" />
+	<output name="output1" coords="50,15,60,25" inputs="and1" />
+</nodeList>
